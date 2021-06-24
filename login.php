@@ -34,8 +34,6 @@
         </li>
     </ul>
     
-    </div>
-
 </nav>
 
 <!-- Login Form Center -->
@@ -50,7 +48,6 @@
       <label>Username</label>
     </div>
 
-    <form method="post">
       <div class="txt_field">
         <input type="text" required>
         <span></span>
@@ -61,19 +58,12 @@
         <input type="submit" value="Login">
         <div class="signup_link">
           Not a member? <a href="#">Signup</a>
-        </div>
-      </form>
-    </div>
-
-
-
-
-
-
-
-
-
-
+        </div> <!-- end div.signup_link -->
+      </div>   <!-- end div.pass -->
+    
+  </form>  
+    
+</div>
 
 </body>
 </html>
