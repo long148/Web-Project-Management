@@ -1,50 +1,48 @@
 <!DOCTYPE html>
-<html>
-<title>Login Page Pop Up</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="css/login.css">
-
-
-
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Single</title>
+</head>
 
 <body>
 
 
-<!-- Login Form Center -->
-<div class="center">
-  <h1>Login</h1>
+<div class="sidebar">
+  <a  href="#home">Home</a>
+  <a href="#news">News</a>
+  <a href="#contact">Contact</a>
+  <a href="#about">About</a>
+</div>
+    
+</div>
 
+    <div class= "content">
 
-  <form method="post">
-    <div class="txt_field">
-      <input type="text" required>
-      <span></span>
-      <label>Username</label>
-    </div>
+      <div class="loginform">
+        <form action="" method = "POST" class= " login-email">
 
+        <p class = "login-text" >Login</p>
+        <div class = "input-group">
+        <label for = "email">E-mail</label><br>
+        <input type= "email" placeholder="Email" name="email"required>
+       
+        <br>
+        
+        <label for = "password">Password</label><br>
+        <input type="password" placeholder = "Password" name = "password"  required>
+       
+        <br>
 
-      <div class="txt_field">
-        <input type="password" minlength="8" required>
-        <span></span>
-        <label>Password</label>
+        <p class = "login-register-text">Không có account? <a href="register.php">Đăng kí ở đây</a>.</p>
+
+        
+        <button name="submit" class = "btn">Login</button> 
+        </form>
       </div>
-
-
-        <input type="submit" value="Login">
-      
-      </form>
-  </div>
-
-
-
-
-
-
-
-
-
-
-
+    </div>
 </body>
 </html>
