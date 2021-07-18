@@ -1,0 +1,275 @@
+openapi: 3.0.3
+info:
+  title: API specification
+  description: API specification for profile microservice
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8081'
+paths:
+  /admin/auth:
+    post:
+      tags:
+        - login
+      summary: login
+      operationId: Login
+      requestBody:
+        description: Login with user name and password
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/LoginRequestModel'
+      responses:
+        '200':
+          description: Log in successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '500':
+          description: "unexpected technical errors"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /admin/quarantine-information:
+    get:
+      tags:
+        - getListQuarantineInformation
+      summary: Get list quarantine information
+      operationId: getListQuarantineInformation
+      parameters:
+        - in: query
+          name: page
+          description: page number, start at page 0, each page will return 20 items
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Get list quarantine information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuarantineInformationResponse'
+        '500':
+          description: "unexpected technical errors"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - createQuarantineInformation
+      summary: Create Quarantine Information
+      operationId: createQuarantineInformation
+      requestBody:
+        description: Create quarantine information
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/CreateQIRequestModel'
+      responses:
+        '200':
+          description: created quarantine information successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectSuccessResponse'
+        '500':
+          description: "unexpected technical errors"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /admin/quarantine-information/{quarantineInfoId}:
+    delete:
+      tags:
+        - deleteQuarantineInformationById
+      summary: Delete quarantine information by id
+      operationId: deleteQuarantineInformationById
+      parameters:
+        - name: quarantineInfoId
+          in: path
+          description: Quarantine Information Id
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: Delete quarantine information by id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectSuccessResponse'
+        '500':
+          description: "unexpected technical errors"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    put:
+      tags:
+        - updateQuarantineInformationById
+      summary: Update quarantine information by id
+      operationId: updateQuarantineInformationById
+      parameters:
+        - name: quarantineInfoId
+          in: path
+          description: Quarantine Information Id
+          required: true
+          schema:
+            type: string
+            format: string
+      requestBody:
+        description: Update quarantine information by id
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/UpdateQIRequestModel'
+      responses:
+        '200':
+          description: Update quarantine information by id successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuarantineInformationResponseModel'
+        '500':
+          description: "unexpected technical errors"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+components:
+  schemas:
+    LoginRequestModel:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    LoginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        tokenType:
+          type: string
+
+    CreateQIRequestModel:
+      type: object
+      required:
+        - originFrom
+        - destination
+        - startAt
+      properties:
+        originFrom:
+          $ref: '#/components/schemas/Province'
+        destination:
+          $ref: '#/components/schemas/Province'
+        startAt:
+          type: string
+          pattern: '^\d{2}-\d{2}-\d{4}$'
+          description: dd-mm-yyyy
+        endAt:
+          type: string
+          pattern: '^\d{2}-\d{2}-\d{4}$'
+          description: dd-mm-yyyy
+    UpdateQIRequestModel:
+      type: object
+      required:
+        - originFrom
+        - destination
+        - endAt
+        - reasonUpdated
+      properties:
+        originFrom:
+          $ref: '#/components/schemas/Province'
+        destination:
+          $ref: '#/components/schemas/Province'
+        endAt:
+          type: string
+          pattern: '^\d{2}-\d{2}-\d{4}$'
+          description: dd-mm-yyyy
+        reasonUpdated:
+          type: string
+
+    QuarantineInformationResponse:
+      type: object
+      properties:
+        currentPage:
+          type: integer
+        totalPage:
+          type: integer
+        totalElements:
+          type: integer
+        quarantineInformationList:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuarantineInformationResponseModel'
+    QuarantineInformationResponseModel:
+      type: object
+      properties:
+        id:
+          type: string
+        originFrom:
+          type: string
+        destination:
+          type: string
+        startAt:
+          type: string
+        endAt:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        status:
+          type: string
+        reasonUpdated:
+          type: string
+
+
+
+
+    ObjectSuccessResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        responseCode:
+          type: integer
+        message:
+          type: string
+
+
+    ApiError:
+      type: object
+      properties:
+        faults:
+          type: array
+          items:
+            $ref: "#/components/schemas/Fault"
+        responseCode:
+          type: integer
+    Fault:
+      type: object
+      properties:
+        responseCode:
+          type: integer
+        internalMessage:
+          type: string
+        code:
+          type: integer
+        userMessage:
+          type: string
+
+    Province:
+      type: string
+      enum: [AN_GIANG,BA_RIA_VUNG_TAU,BAC_GIANG,BAC_KAN,BAC_LIEU,BAC_NINH,BEN_TRE,BINH_DINH,BINH_DUONG,BINH_PHUOC,BINH_THUAN,CA_MAU,CAO_BANG,DAK_LAK,DAK_NONG,DIEN_BIEN,DONG_NAI,DONG_THAP,GIA_LAI,HA_GIANG,HA_NAM,HA_TINH,HAI_DUONG,HAU_GIANG,HOA_BINH,HUNG_YEN,KHANH_HOA,KIEN_GIANG,KON_TUM,LAI_CHAU,LAM_DONG,LANG_SON,LAO_CAI,LONG_AN,NAM_DINH,NGHE_AN,NINH_BINH,NINH_THUAN,PHU_THO,PHU_YEN,QUANG_BINH,QUANG_NAM,QUANG_NGAI,QUANG_NINH,QUANG_TRI,SOC_TRANG,SON_LA,TAY_NINH,THAI_BINH,THAI_NGUYEN,THANH_HOA,THUA_THIEN_HUE,TIEN_GIANG,TRA_VINH,TUYEN_QUANG,VINH_LONG,VINH_PHUC,YEN_BAI,CAN_THO,DA_NANG,HA_NOI,HAI_PHONG,HO_CHI_MINH]
+  
